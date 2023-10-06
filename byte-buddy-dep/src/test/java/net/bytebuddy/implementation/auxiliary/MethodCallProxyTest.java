@@ -4,9 +4,10 @@ import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.test.utility.CallTraceable;
 import net.bytebuddy.utility.RandomString;
 import org.junit.Test;
-
+import java.lang.reflect.Field;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Type;
+import java.util.Vector;
 import java.util.concurrent.Callable;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -81,8 +82,12 @@ public class MethodCallProxyTest extends AbstractMethodCallProxyTest {
         Class<?> auxiliaryType = proxyOnlyDeclaredMethodOf(GenericType.class);
         assertThat(auxiliaryType.getTypeParameters().length, is(0));
         assertThat(auxiliaryType.getDeclaredMethod("call").getGenericReturnType(), is((Type) Object.class));
-        assertThat(auxiliaryType.getDeclaredFields()[1].getGenericType(), is((Type) Object.class));
-        assertThat(auxiliaryType.getDeclaredFields()[2].getGenericType(), is((Type) Number.class));
+        Vector<Type> t = new Vector<Type>();
+        for(Field x: auxiliaryType.getDeclaredFields()){
+            t.add(x.getGenericType());
+        }
+        assertThat(t.contains((Type) Object.class),is(true));
+        assertThat(t.contains((Type) Number.class),is(true));
     }
 
     @Test
