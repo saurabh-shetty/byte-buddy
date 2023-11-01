@@ -44,7 +44,7 @@ public class TypeDescriptionArrayProjectionTest extends AbstractTypeDescriptionT
                 return type1.getTypeName().compareTo(type2.getTypeName());
             }
         });
-        return TypeDefinition.Sort.describe(method.getGenericExceptionTypes()[index],
+        return TypeDefinition.Sort.describe(exceptionTypes[index],
                 new TypeDescription.Generic.AnnotationReader.Delegator.ForLoadedExecutableExceptionType(method, index));
     }
 
