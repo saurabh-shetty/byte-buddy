@@ -7,7 +7,9 @@ import org.junit.rules.MethodRule;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-
+import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.Comparator;
 import static org.mockito.Mockito.mock;
 
 public class TypeDescriptionArrayProjectionTest extends AbstractTypeDescriptionTest {
@@ -35,6 +37,13 @@ public class TypeDescriptionArrayProjectionTest extends AbstractTypeDescriptionT
     }
 
     protected TypeDescription.Generic describeExceptionType(Method method, int index) {
+        Type[] exceptionTypes = method.getGenericExceptionTypes();
+        Arrays.sort(exceptionTypes, new Comparator<Type>() {
+            @Override
+            public int compare(Type type1, Type type2) {
+                return type1.getTypeName().compareTo(type2.getTypeName());
+            }
+        });
         return TypeDefinition.Sort.describe(method.getGenericExceptionTypes()[index],
                 new TypeDescription.Generic.AnnotationReader.Delegator.ForLoadedExecutableExceptionType(method, index));
     }
